@@ -1,1 +1,10 @@
 Q:\Учеба\Програмирование\git\ML\point Grafs\pointGraf\pointGraf\bin\Debug\pointGraf.exe.config
+Q:\Учеба\Програмирование\git\ML\point Grafs\pointGraf\pointGraf\bin\Debug\pointGraf.exe
+Q:\Учеба\Програмирование\git\ML\point Grafs\pointGraf\pointGraf\bin\Debug\pointGraf.pdb
+Q:\Учеба\Програмирование\git\ML\point Grafs\pointGraf\pointGraf\obj\Debug\pointGraf.csprojResolveAssemblyReference.cache
+Q:\Учеба\Програмирование\git\ML\point Grafs\pointGraf\pointGraf\obj\Debug\pointGraf.Form1.resources
+Q:\Учеба\Програмирование\git\ML\point Grafs\pointGraf\pointGraf\obj\Debug\pointGraf.Properties.Resources.resources
+Q:\Учеба\Програмирование\git\ML\point Grafs\pointGraf\pointGraf\obj\Debug\pointGraf.csproj.GenerateResource.Cache
+Q:\Учеба\Програмирование\git\ML\point Grafs\pointGraf\pointGraf\obj\Debug\pointGraf.exe
+Q:\Учеба\Програмирование\git\ML\point Grafs\pointGraf\pointGraf\obj\Debug\pointGraf.pdb
+Q:\Учеба\Програмирование\git\ML\point Grafs\pointGraf\pointGraf\obj\Debug\pointGraf.graf.resources

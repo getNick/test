@@ -16,5 +16,12 @@ namespace pointGraf
         {
             InitializeComponent();
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            graf f = new graf();
+            f.installParam(from.Text, before.Text, countPoint.Text, function.Text);
+            f.Show();
+        }
     }
 }
