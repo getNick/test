@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -14,15 +15,9 @@ namespace ML_function
 {
     public partial class Form1 : Form
     {
-        public Form1()
-        {
-            InitializeComponent();
-        }
-
-        private void Form1_Load(object sender, EventArgs e)
-        {
-            double[] theta = { 0, 0 };
-            double[,] data ={
+        int countIteration = 0;
+        double[] theta = { 0, 0 };
+        double[,] data ={
 {6.1101,17.592},
 {5.5277,9.1302},
 { 8.5186,13.662},
@@ -121,7 +116,16 @@ namespace ML_function
 { 13.394,9.0551},
 { 5.4369,0.61705}
 };
-            textBox1.Text=""+costFunction(data, theta);
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+           
+            plotData(data);
+
         }
         public double costFunction(double[,] data,double []theta)
         {
@@ -130,10 +134,109 @@ namespace ML_function
             for (int i = 0; i < size; i++)
             {
                 temp += Math.Pow((theta[0] + theta[1] * data[i,0] - data[i,1]), 2);
-                Console.Write(temp);
-                Console.WriteLine();
             }
             return temp/(2*size);
         }
+        public double[] gradientDescent(double[,] data, double[] theta,double alpha,int iter,int demonstrationSpeed)
+        {
+            int size = data.GetLength(0);
+            int saveCountIteration = countIteration;
+            for (; countIteration <= saveCountIteration+iter; countIteration++)
+            {
+                double temp;
+                for (int i = 0; i < size; i++)
+                {
+                    temp = theta[0] + theta[1] * data[i, 0] - data[i, 1];
+                    theta[0] -= temp * alpha / size;
+                    theta[1] -= data[i, 0] * temp * alpha / size;
+                }
+                chart1.Series[0].Points.AddXY(countIteration, costFunction(data, theta));
+                if (demonstrationSpeed != 0 && countIteration % demonstrationSpeed == 0)
+                {
+                    Console.Write(countIteration);
+                    plotHypothesis(data, theta);
+                    Refresh();
+                    System.Threading.Thread.Sleep(1000);
+                }
+               
+
+            }
+            // Console.Write(theta[0] + "    " + theta[1]);
+            return theta;
+        }
+        public void plotData(double[,] data)
+        {
+            for (int i = 0; i < data.GetLength(0); i++) {
+                chart.Series[0].Points.AddXY(data[i, 0], data[i, 1]);
+            }
+        }
+        public void plotHypothesis(double[,] data,double[] theta)
+        {
+            
+            chart.Series[1].Points.Clear();
+            for (int i = 0; i < data.GetLength(0); i++)
+            {
+                
+                chart.Series[1].Points.AddXY(data[i, 0], theta[0]+theta[1]*data[i, 0]);
+                //chart.Series[1].Points.Invalidate();
+            }
+            chart.Invalidate();
+        }
+
+        private void run_Click(object sender, EventArgs e)
+        {
+            if (textBox1.Text != null & textBox2.Text != null)
+            {
+                double alpha = Double.Parse(textBox1.Text);
+                int iteration = Int32.Parse(textBox2.Text);
+                int demonstrationSpeed = trackBar1.Value;
+               // Thread myThread = new Thread(gradientDescent(data, theta, alpha, iteration, demonstrationSpeed)); //Создаем новый объект потока (Thread)
+                //myThread.Start(); //запускаем поток
+
+                theta = gradientDescent(data, theta,alpha ,iteration, demonstrationSpeed);
+                plotHypothesis(data, theta);
+            }
+            else
+            {
+                MessageBox.Show("Введите значения");
+            }
+        }
+
+        private void textBox2_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            char ch = e.KeyChar;
+            if (!Char.IsDigit(ch) && ch != 8)
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void textBox1_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            char ch = e.KeyChar;
+            if (!Char.IsDigit(ch) && ch != 8 && ch != ',')
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void trackBar1_Scroll(object sender, EventArgs e)
+        {   
+            if(trackBar1.Value!=0)
+            label4.Text = trackBar1.Value + " Итераций / сек";
+            else
+             label4.Text = "Демонстрация отключена";
+        }
+        public void hyperbol()
+        {
+            double y = 0;
+            for ( double x = -5; x < 5; x += 0.01)
+            {
+                y = -x * x;
+                chart.Series[1].Points.AddXY(x,y);
+            }
+
+        }
+
     }
 }
