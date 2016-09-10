@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -123,8 +124,9 @@ namespace ML_function
 
         private void Form1_Load(object sender, EventArgs e)
         {
-           
-            plotData(data);
+            loadLinearRegression();
+
+            //plotData(data);
 
         }
         public double costFunction(double[,] data,double []theta)
@@ -230,12 +232,51 @@ namespace ML_function
         public void hyperbol()
         {
             double y = 0;
-            for ( double x = -5; x < 5; x += 0.01)
+            for (double x = -5; x < 5; x += 0.01)
             {
                 y = -x * x;
-                chart.Series[1].Points.AddXY(x,y);
+                chart.Series[1].Points.AddXY(x, y);
             }
 
+        }
+
+        public float [,] loadLinearRegression()
+        {
+            string[] mass = File.ReadAllLines("Q:/machine-learning-ex1/ex1/ex1data1.txt");
+            string numbers =null;
+            float[,] data = new float[97,2];
+            int countElem = 0;
+            string dataString = null;
+            for (int i = 0; i < mass.GetLength(0); i++)
+            {
+               dataString += mass[i];
+            }
+           
+            for (int i = 0; i < dataString.Length; i++)
+            {
+               // Console.WriteLine(dataString.ElementAt(i));
+                if (dataString.ElementAt(i) != ',')
+                {
+                    numbers += dataString.ElementAt(i);
+                }
+                else
+                {
+                    Console.WriteLine(numbers);
+                    numbers = null;
+                    /*data[countElem / 2, countElem % 2] = float.Parse(numbers);
+                    countElem++;
+                    numbers = null;
+                    Console.Write(data[countElem / 2, countElem % 2]);*/
+                }
+                
+            }
+
+
+
+
+
+
+            return data;
         }
 
     }
