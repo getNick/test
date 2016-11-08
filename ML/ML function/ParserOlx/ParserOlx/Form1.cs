@@ -18,6 +18,9 @@ namespace ParserOlx
 {
     public partial class Form1 : Form
     {
+        string output = null;
+        List<house> list = new List<house>();
+
         public Form1()
         {
             InitializeComponent();
@@ -25,60 +28,81 @@ namespace ParserOlx
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            getData(1);
+            for(int i = 0; i < 50; i++)
+            {
+                getData(i);
+            }
+            foreach(house h in list)
+            {
+                chart1.Series[0].Points.AddXY(h.houseSize, h.housePrise);
+                Console.WriteLine(h.houseSize + " " + h.housePrise);
+            }
+            writeFile();
+
+
         }
-        public string getData(int num)
+        public List<house> getData(int num)
         {
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://xan.com.ua/ru/flats/find/Kharkov?page="+num);
-            request.Method = "GET";
-            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-            Stream dataStream = response.GetResponseStream();
-            StreamReader reader = new StreamReader(dataStream);
-            string strResponse = reader.ReadToEnd();
-
-            HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
-            doc.LoadHtml(strResponse);
-            //<ul class="w-contentBlog-descrip">
-            HtmlNodeCollection NoAltElements = doc.DocumentNode.SelectNodes("//ul[@class='li']");
-
-            if (NoAltElements != null)
-            {
-                foreach (HtmlNode hn in NoAltElements)
-                {
-                    string outputText = hn.InnerText.Trim();
-
-                    Console.WriteLine(outputText);
+            HtmlWeb web = new HtmlWeb();
+            HtmlDocument document = web.Load("http://xan.com.ua/ru/flats/find/Kharkov?page=" + num);
+            HtmlNode[] nodes = document.DocumentNode.SelectNodes("//li[@class='w-contentBlog-title']").ToArray();
+            HtmlNode[] nodes2 = document.DocumentNode.SelectNodes("//li[@class='w-contentBlog-main']").ToArray();
+            float size = 0;
+            float prise = 0;
+            for(int i = 0; i < nodes.Length; i++) { 
+                int indexComma=nodes[i].InnerHtml.IndexOf(",")+2;
+                int indexPrise = nodes2[i].InnerHtml.IndexOf(":") + 2;
+                int  sizePrise= nodes2[i].InnerHtml.IndexOf("<")-indexPrise-1;
+                //output+=nodes[i].InnerHtml;
+                Console.WriteLine(nodes[i].InnerHtml);
+                Console.WriteLine(nodes2[i].InnerHtml);
+                try {
+                    if (nodes[i].InnerHtml.Substring(indexComma + 1).Contains("."))
+                    {
+                        size = float.Parse(nodes[i].InnerHtml.Replace('.',',').Substring(indexComma, 5));
+                    }
+                    else {
+                        size = float.Parse(nodes[i].InnerHtml.Substring(indexComma, 2));
+                    }
+                    if (nodes2[i].InnerHtml.Substring(indexPrise, sizePrise).Contains("$"))
+                    {
+                        prise = float.Parse(nodes2[i].InnerHtml.Substring(indexPrise, sizePrise-2));
+                    }
+                    else
+                    {
+                        continue;
+                    }
                 }
+                catch (System.FormatException)
+                {
+                    continue;
+                }
+                list.Add(new house
+                {
+                    houseSize = size,
+                    housePrise = prise
+                });
+                //output +="\n"+size+"  "+prise;
+                //textBox1.Text = output;
+               //Console.WriteLine(size + "  " + prise);
+
             }
-            else
-            {
-                MessageBox.Show("Такого элемента нет!");
-            }
-
-
-
-
-
-
-            //Console.Write(strResponse);
-            /* raw=strResponse.Substrings("жилая площадь - ", "м?,", 0);
-
-               for(int i=0; i < raw.Length; i++)
-               {
-                   Console.WriteLine(raw[i]);
-               }*/
-
-
-            // string text="< li > 4 этаж в 9 - этажке, полька, жилая площадь -19 м ?, эконом - класс </ li >";
-            // string text1 = "жилая площадь - ";
-            //string text2 = "м?,";
-            // for(int i=0;i)
-            // string match = Regex.Match(text, @"жилая площадь - (.*) м?,").ToString();
-           // MessageBox.Show(match);
-            //int firstCharacter = strResponse.IndexOf(text1);
-           // Console.WriteLine(match);
-            
-            return strResponse;
+            return list;
         }
+        public void writeFile()
+        {
+            StreamWriter str = new StreamWriter("data.txt");
+            foreach (house h in list)
+            {
+                str.WriteLine(h.houseSize+" "+h.housePrise);
+            }
+            str.Close();
+
+        }
+    }
+    public class house
+    {
+        public float houseSize { get; set; }
+        public float housePrise { get; set; }
     }
 }

@@ -242,42 +242,68 @@ namespace ML_function
 
         public float [,] loadLinearRegression()
         {
-            string[] mass = File.ReadAllLines("Q:/machine-learning-ex1/ex1/ex1data1.txt");
+            string[] mass = File.ReadAllLines("Q:/Учеба/Програмирование/git/ML/ML function/ParserOlx/ParserOlx/bin/Debug/data.txt");
             string numbers =null;
             float[,] data = new float[97,2];
-            int countElem = 0;
-            string dataString = null;
+           
             for (int i = 0; i < mass.GetLength(0); i++)
             {
-               dataString += mass[i];
-            }
-           
-            for (int i = 0; i < dataString.Length; i++)
-            {
-               // Console.WriteLine(dataString.ElementAt(i));
-                if (dataString.ElementAt(i) != ',')
+                for (int j = 0; j < mass[i].Length; j++)
                 {
-                    numbers += dataString.ElementAt(i);
+                    if (mass[i].ElementAt(j) != ' ')
+                    {
+                        numbers += mass[i].ElementAt(j);
+                    }
+                    else
+                    {
+                        Console.WriteLine(numbers);
+                        numbers = null;
+                    } 
                 }
-                else
-                {
-                    Console.WriteLine(numbers);
-                    numbers = null;
-                    /*data[countElem / 2, countElem % 2] = float.Parse(numbers);
-                    countElem++;
-                    numbers = null;
-                    Console.Write(data[countElem / 2, countElem % 2]);*/
-                }
-                
+                Console.WriteLine(numbers);
+                numbers = null;
+
             }
 
 
-
+    
 
 
 
             return data;
         }
 
+    }
+    public class data
+    {
+        public float value1 { get; set; }
+        public float value2 { get; set; }
+        public List<data> getData() {
+            List<data> dataList = new List<data>();
+            string[] mass = File.ReadAllLines("Q:/Учеба/Програмирование/git/ML/ML function/ParserOlx/ParserOlx/bin/Debug/data.txt");
+            string numbers = null;
+
+            for (int i = 0; i < mass.GetLength(0); i++)
+            {
+                for (int j = 0; j < mass[i].Length; j++)
+                {
+                    if (mass[i].ElementAt(j) != ' ')
+                    {
+                        numbers += mass[i].ElementAt(j);
+                    }
+                    else
+                    {
+                        Console.WriteLine(numbers);
+                        //.Add.value1(float.Parse(numbers));
+                        numbers = null;
+                    }
+                }
+                Console.WriteLine(numbers);
+                numbers = null;
+
+            }
+            return dataList;
+        }
+        
     }
 }
