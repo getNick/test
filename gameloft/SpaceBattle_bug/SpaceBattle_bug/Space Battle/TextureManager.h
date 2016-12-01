@@ -8,6 +8,7 @@
 #define ENEMY02_NAME			"enemies_02.tga"
 #define ENEMY03_NAME			"enemies_03.tga"
 #define ENEMY04_NAME			"enemies_04.tga"
+#define ASTEROID_NAME			"asteroid.tga"
 #define ROCKET_NAME				"rocket.tga"
 #define EFFECT_NAME				"particle_atlas_additive.tga"
 #define BUTTON_START_NAME		"Start.png"
@@ -15,7 +16,7 @@
 #define BUTTON_BACK_NAME		"Back.png"
 #define BUTTON_QUIT_NAME		"Quit.png"
 
-#define ENEMY_TEXTURES_COUNT	4
+#define ENEMY_TEXTURES_COUNT	5 //увеличил количество текстур противников
 #define BUTTON_TEXTURES_COUNT	4
 
 
