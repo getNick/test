@@ -35,7 +35,7 @@ void printArr( T const &arr) {
 	cout << endl;
 }
 template<typename T>
-void printArr( T* const&arr) {
+inline void printArr( T* const&arr) {
 	cout << typeid(arr).name() << endl;
 	int size = 3;
 	for (int i = 0; i <size ; i++)
