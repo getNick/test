@@ -211,6 +211,7 @@ void Game::menu()
 		{
 			state = INGAME;
 			toLevel(false);
+			score = 0;//zeroing score before start game
 		}
 		else if (gui->isButtonPressed(OPTIONS_BUTTON))
 		{
@@ -267,12 +268,14 @@ void Game::menu()
 
 	case OVER:
 		timer.totalTime = engine->getNow();
-		score -= timer.totalTime / 2;
+		//score -= timer.totalTime / 2; //fix bug(large score)
 
 		if (gui->isButtonPressed(START_BUTTON))
 		{
 			state = INGAME;
 			toLevel(false);
+			score = 0;// zeroing score after lose
+			
 		}
 		else if (gui->isButtonPressed(BACK_BUTTON))
 		{

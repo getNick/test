@@ -9,7 +9,8 @@ enum EnemyType
 	ENEMY0 = 0,
 	ENEMY1,
 	ENEMY2,
-	ENEMY3
+	ENEMY3,
+	ENEMY4//add new type enemy
 };
 
 enum Damage
@@ -20,7 +21,7 @@ enum Damage
 	DAMAGE3 = 100
 };
 
-#define ENEMY_TYPE_COUNT		4
+#define ENEMY_TYPE_COUNT		5//refrash type enemy count
 #define ENEMY_STEP_TIME			1500
 #define ENEMY_FIRE_TIME			1000
 #define ENEMY_STEP_SIZE			5

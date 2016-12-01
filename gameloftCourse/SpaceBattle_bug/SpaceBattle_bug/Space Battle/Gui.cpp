@@ -149,11 +149,17 @@ void GUI::pause(IGUIEnvironment *gui, TextureManager *&manager)
 void GUI::game(IGUIEnvironment *gui, TextureManager *&manager)
 {
 	drop(true, true);
-
+	
+	if (score) {//romove ptr when he exist
+		score->remove();
+	}
+	//fix bug(score from last round)
 	score = gui->addStaticText(L"Score   0", { SCORE_POSITION_H, SCORE_POSITION_V, SCORE_POSITION_H + SCORE_HEALTH_WIDTH, SCORE_POSITION_V + SCORE_HEALTH_WIDTH });
 	score->setOverrideColor(WHITE_COLOR);
 	score->enableOverrideColor(true);
-
+	if (health) {//romove ptr when he exist
+		health->remove();
+	}
 	health = gui->addStaticText(L"Health   100", { HEALTH_POSITION_H, HEALTH_POSITION_V, HEALTH_POSITION_H + SCORE_HEALTH_WIDTH, HEALTH_POSITION_V + SCORE_HEALTH_HEIGHT });
 	health->setOverrideColor(WHITE_COLOR);
 	health->enableOverrideColor(true);
@@ -208,7 +214,8 @@ void GUI::win(IGUIEnvironment *gui, TextureManager *&manager)
 
 void GUI::lose(IGUIEnvironment *gui, TextureManager *&manager)
 {
-	drop(true);
+	drop(true,true);//add second value true
+	//fix exception 
 
 	result = gui->addStaticText(L"You lost!",
 	{
