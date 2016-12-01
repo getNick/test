@@ -67,6 +67,7 @@ void TextureManager::loadTextures(IVideoDriver *video)
 	enemyTex[1] = video->getTexture(name + ENEMY02_NAME);
 	enemyTex[2] = video->getTexture(name + ENEMY03_NAME);
 	enemyTex[3] = video->getTexture(name + ENEMY04_NAME);
+	enemyTex[4] = video->getTexture(name + ASTEROID_NAME);//установка текстуры для астероида
 
 	rocketTex = new ITexture *;
 	rocketTex[0] = video->getTexture(name + ROCKET_NAME);

@@ -211,6 +211,8 @@ void Game::menu()
 		{
 			state = INGAME;
 			toLevel(false);
+			score = 0;
+			//обнуление счета при каждом запуске новой игры
 		}
 		else if (gui->isButtonPressed(OPTIONS_BUTTON))
 		{
@@ -267,12 +269,14 @@ void Game::menu()
 
 	case OVER:
 		timer.totalTime = engine->getNow();
-		score -= timer.totalTime / 2;
+		//score -= timer.totalTime / 2; //странное действие (большой счет)
 
 		if (gui->isButtonPressed(START_BUTTON))
 		{
 			state = INGAME;
 			toLevel(false);
+			score = 0;// дописал обнуление после поражения
+			
 		}
 		else if (gui->isButtonPressed(BACK_BUTTON))
 		{

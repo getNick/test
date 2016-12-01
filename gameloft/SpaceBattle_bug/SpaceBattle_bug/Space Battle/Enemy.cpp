@@ -34,6 +34,12 @@ Enemy::Enemy(ISceneManager *manager, TextureManager *&texManager, u32 curType, D
 		ownDamage = DAMAGE3;
 		index = 3;
 		break;
+	case ENEMY4:
+		name += "asteroid.x";
+		type = ENEMY4;
+		ownDamage = DAMAGE0;
+		index = 4;
+		break;
 	}
 
 	this->name = name;

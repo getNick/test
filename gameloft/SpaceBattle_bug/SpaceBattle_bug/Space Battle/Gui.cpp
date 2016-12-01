@@ -149,11 +149,17 @@ void GUI::pause(IGUIEnvironment *gui, TextureManager *&manager)
 void GUI::game(IGUIEnvironment *gui, TextureManager *&manager)
 {
 	drop(true, true);
-
+	
+	if (score) {//удаление указателя если он существует
+		score->remove();
+	}
+	//счет с предыдущего раунда
 	score = gui->addStaticText(L"Score   0", { SCORE_POSITION_H, SCORE_POSITION_V, SCORE_POSITION_H + SCORE_HEALTH_WIDTH, SCORE_POSITION_V + SCORE_HEALTH_WIDTH });
 	score->setOverrideColor(WHITE_COLOR);
 	score->enableOverrideColor(true);
-
+	if (health) {//удаление указателя если он существует
+		health->remove();
+	}
 	health = gui->addStaticText(L"Health   100", { HEALTH_POSITION_H, HEALTH_POSITION_V, HEALTH_POSITION_H + SCORE_HEALTH_WIDTH, HEALTH_POSITION_V + SCORE_HEALTH_HEIGHT });
 	health->setOverrideColor(WHITE_COLOR);
 	health->enableOverrideColor(true);
@@ -208,8 +214,8 @@ void GUI::win(IGUIEnvironment *gui, TextureManager *&manager)
 
 void GUI::lose(IGUIEnvironment *gui, TextureManager *&manager)
 {
-	drop(true);
-
+	drop(true,true);//добавил второй параметр true
+	//исправление вылета
 	result = gui->addStaticText(L"You lost!",
 	{
 		WINDOW_WIDTH / 2 - SCORE_HEALTH_WIDTH / 2,

@@ -2,7 +2,7 @@
 #include "Enemy.h"
 #include "TextureManager.h"
 
-#define ENEMY_COUNT				20
+#define ENEMY_COUNT				25//увеличил количество противников
 #define ENEMY_LINE_COUNT		5
 #define ENEMY_VERTICAL_MARGIN	50
 #define ENEMY_HOTIZONTAL_MARGIN	100
