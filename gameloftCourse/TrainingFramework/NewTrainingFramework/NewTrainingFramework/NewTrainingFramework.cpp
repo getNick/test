@@ -11,17 +11,23 @@
 
 GLuint vboId;
 Shaders myShaders;
+Matrix m;
+float m_time;
 
 int Init ( ESContext *esContext )
 {
 	glClearColor ( 0.0f, 0.0f, 0.0f, 0.0f );
-
+	m.SetIdentity();
 	//triangle data (heap)
 	Vertex verticesData[3];
-
+	//position
 	verticesData[0].pos.x =  0.0f;  verticesData[0].pos.y =  0.5f;  verticesData[0].pos.z =  0.0f;
 	verticesData[1].pos.x = -0.5f;  verticesData[1].pos.y = -0.5f;  verticesData[1].pos.z =  0.0f;
 	verticesData[2].pos.x =  0.5f;  verticesData[2].pos.y = -0.5f;  verticesData[2].pos.z =  0.0f;
+	//color
+	verticesData[0].color.x = 1.0f; verticesData[0].color.y = 0.0f; verticesData[0].color.z = 0.0f;
+	verticesData[1].color.x = 0.0f; verticesData[1].color.y = 1.0f; verticesData[1].color.z = 0.0f;
+	verticesData[2].color.x = 0.0f; verticesData[2].color.y = 0.0f; verticesData[2].color.z = 1.0f;
 
 	//buffer object
 	glGenBuffers(1, &vboId); //buffer object name generation
@@ -42,12 +48,21 @@ void Draw ( ESContext *esContext )
 
 	glBindBuffer(GL_ARRAY_BUFFER, vboId);
 
-	
-	if(myShaders.positionAttribute != -1) //attribute passing to shader, for uniforms use glUniform1f(time, deltaT); glUniformMatrix4fv( m_pShader->matrixWVP, 1, false, (GLfloat *)&rotationMat );
+	GLfloat* ptr = (GLfloat *)0;
+	if (myShaders.positionAttribute != -1)
 	{
 		glEnableVertexAttribArray(myShaders.positionAttribute);
-		glVertexAttribPointer(myShaders.positionAttribute, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
+		glVertexAttribPointer(myShaders.positionAttribute, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), ptr);
+		glUniformMatrix4fv(myShaders.matrixTransform, 1, false, (GLfloat *)&m);
 	}
+
+
+	if (myShaders.colorAttribute != -1)
+	{
+		glEnableVertexAttribArray(myShaders.colorAttribute);
+		glVertexAttribPointer(myShaders.colorAttribute, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), ptr + 3);
+	}
+
 
 	glDrawArrays(GL_TRIANGLES, 0, 3);
 
@@ -58,7 +73,8 @@ void Draw ( ESContext *esContext )
 
 void Update ( ESContext *esContext, float deltaTime )
 {
-
+	m_time += deltaTime;
+	m.SetRotationX(m_time);
 }
 
 void Key ( ESContext *esContext, unsigned char key, bool bIsPressed)
