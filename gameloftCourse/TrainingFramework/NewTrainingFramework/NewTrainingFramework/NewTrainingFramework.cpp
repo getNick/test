@@ -13,27 +13,38 @@ GLuint vboId;
 Shaders myShaders;
 Matrix m;
 float m_time;
-
+static const unsigned int countIndeces = 18;
+GLuint piramid;
 int Init ( ESContext *esContext )
 {
 	glClearColor ( 0.0f, 0.0f, 0.0f, 0.0f );
 	m.SetIdentity();
+	unsigned int indeces[countIndeces] = { 0,1,2,  1,2,3,  3,4,1,  0,1,4,  0,4,2, 2,4,3};
 	//triangle data (heap)
-	Vertex verticesData[3];
+	Vertex verticesData[5];
 	//position
-	verticesData[0].pos.x =  0.0f;  verticesData[0].pos.y =  0.5f;  verticesData[0].pos.z =  0.0f;
-	verticesData[1].pos.x = -0.5f;  verticesData[1].pos.y = -0.5f;  verticesData[1].pos.z =  0.0f;
+	verticesData[0].pos.x = -0.5f;  verticesData[0].pos.y = -0.5f;  verticesData[0].pos.z =  0.0f;
+	verticesData[1].pos.x =  0.0f;  verticesData[1].pos.y =  0.5f;  verticesData[1].pos.z = -0.5f;
 	verticesData[2].pos.x =  0.5f;  verticesData[2].pos.y = -0.5f;  verticesData[2].pos.z =  0.0f;
+	verticesData[3].pos.x =  0.5f;  verticesData[3].pos.y = -0.5f;  verticesData[3].pos.z = -1.0f;
+	verticesData[4].pos.x = -0.5f;  verticesData[4].pos.y = -0.5f;  verticesData[4].pos.z = -1.0f;
 	//color
 	verticesData[0].color.x = 1.0f; verticesData[0].color.y = 0.0f; verticesData[0].color.z = 0.0f;
 	verticesData[1].color.x = 0.0f; verticesData[1].color.y = 1.0f; verticesData[1].color.z = 0.0f;
 	verticesData[2].color.x = 0.0f; verticesData[2].color.y = 0.0f; verticesData[2].color.z = 1.0f;
-
+	verticesData[3].color.x = 0.0f; verticesData[3].color.y = 1.0f; verticesData[3].color.z = 1.0f;
+	verticesData[4].color.x = 1.0f; verticesData[4].color.y = 0.0f; verticesData[4].color.z = 1.0f;
+	//buffer indeces
+	GLuint elementbuffer;
+	glGenBuffers(1, &elementbuffer);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, countIndeces*sizeof(unsigned int), indeces, GL_STATIC_DRAW);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
 	//buffer object
 	glGenBuffers(1, &vboId); //buffer object name generation
 	glBindBuffer(GL_ARRAY_BUFFER, vboId); //buffer object binding
 	glBufferData(GL_ARRAY_BUFFER, sizeof(verticesData), verticesData, GL_STATIC_DRAW); //creation and initializion of buffer onject storage
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ARRAY_BUFFER, piramid);
 
 	//creation of shaders and program 
 	return myShaders.Init("../Resources/Shaders/TriangleShaderVS.vs", "../Resources/Shaders/TriangleShaderFS.fs");
@@ -63,8 +74,8 @@ void Draw ( ESContext *esContext )
 		glVertexAttribPointer(myShaders.colorAttribute, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), ptr + 3);
 	}
 
-
-	glDrawArrays(GL_TRIANGLES, 0, 3);
+	glDrawElements(GL_TRIANGLES, countIndeces, GL_UNSIGNED_INT, (void*)piramid);
+	//glDrawArrays(GL_TRIANGLE_FAN, 0, 5);
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
@@ -74,7 +85,8 @@ void Draw ( ESContext *esContext )
 void Update ( ESContext *esContext, float deltaTime )
 {
 	m_time += deltaTime;
-	m.SetRotationX(m_time);
+	m.SetRotationAngleAxis(m_time, 0.1f, 0.0f, 0.1f);
+	//m.SetRotationY(m_time);
 }
 
 void Key ( ESContext *esContext, unsigned char key, bool bIsPressed)
