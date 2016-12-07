@@ -348,7 +348,7 @@ namespace lb2
                 for (int j = 0; j < count; j++)
                 {
                     temp += Math.Pow(Convert.ToDouble(dataGridView2.Rows[i].Cells[j + 2].Value) -
-                        (Convert.ToDouble(dataGridView2.Rows[i].Cells[count + 4].Value) / Convert.ToDouble(dataGridView2.Rows[count + 2].Cells[i + 2].Value)), 2);
+                        (Convert.ToDouble(dataGridView2.Rows[i].Cells[count + 4].Value) / Convert.ToDouble(dataGridView2.Rows[count + 2].Cells[j + 2].Value)), 2);
                 }
                 dataGridView2.Rows[i].Cells[count + 5].Value = temp;
             }

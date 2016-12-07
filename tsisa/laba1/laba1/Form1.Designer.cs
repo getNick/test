@@ -234,14 +234,14 @@
             series3.ChartArea = "ChartArea1";
             series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
             series3.Legend = "Legend1";
-            series3.LegendText = "Адекватная система";
+            series3.LegendText = "Пригодная система";
             series3.MarkerColor = System.Drawing.Color.LimeGreen;
             series3.MarkerSize = 15;
             series3.Name = "adequacyPoint";
             series4.ChartArea = "ChartArea1";
             series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
             series4.Legend = "Legend1";
-            series4.LegendText = "Неподходящая система";
+            series4.LegendText = "Непригодная система";
             series4.MarkerColor = System.Drawing.Color.Red;
             series4.MarkerSize = 15;
             series4.Name = "nonAdequacyPoint";
