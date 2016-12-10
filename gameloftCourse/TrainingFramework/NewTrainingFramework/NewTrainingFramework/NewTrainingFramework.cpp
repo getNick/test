@@ -7,26 +7,29 @@
 #include "Shaders.h"
 #include "Globals.h"
 #include <conio.h>
+#include <vector>
+#include "model.h"
 
 
 GLuint vboId;
 Shaders myShaders;
 Matrix m;
 float m_time;
-static const unsigned int countIndeces = 36;
-GLuint cube;
+model bus;
+//static const unsigned int countIndeces = 36;
+//GLuint cube;
 int Init ( ESContext *esContext )
 {
-	glClearColor ( 0.0f, 0.0f, 0.0f, 0.0f );
+	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	m.SetIdentity();
-	unsigned int indeces[countIndeces] = { 0,1,3,  0,3,2,  2,3,7,  2,7,6,  1,3,5, 3,5,7,  4,7,6,  4,5,7, 0,1,5, 0,5,4, 0,2,6, 0,4,6};
+	/*unsigned int indeces[countIndeces] = { 0,1,3,  0,3,2,  2,3,7,  2,7,6,  1,3,5, 3,5,7,  4,7,6,  4,5,7, 0,1,5, 0,5,4, 0,2,6, 0,4,6 };
 	//triangle data (heap)
 	Vertex verticesData[8];
 	//position
-	verticesData[0].pos.x = -0.5f;  verticesData[0].pos.y = -0.5f;  verticesData[0].pos.z =  0.0f;
-	verticesData[1].pos.x = -0.5f;  verticesData[1].pos.y =  0.5f;  verticesData[1].pos.z =  0.0f;
-	verticesData[2].pos.x =  0.5f;  verticesData[2].pos.y = -0.5f;  verticesData[2].pos.z =  0.0f;
-	verticesData[3].pos.x =  0.5f;  verticesData[3].pos.y =  0.5f;  verticesData[3].pos.z =  0.0f;
+	verticesData[0].pos.x = -0.5f;  verticesData[0].pos.y = -0.5f;  verticesData[0].pos.z = 0.0f;
+	verticesData[1].pos.x = -0.5f;  verticesData[1].pos.y = 0.5f;  verticesData[1].pos.z = 0.0f;
+	verticesData[2].pos.x = 0.5f;  verticesData[2].pos.y = -0.5f;  verticesData[2].pos.z = 0.0f;
+	verticesData[3].pos.x = 0.5f;  verticesData[3].pos.y = 0.5f;  verticesData[3].pos.z = 0.0f;
 
 	verticesData[4].pos.x = -0.5f;  verticesData[4].pos.y = -0.5f;  verticesData[4].pos.z = -1.0f;
 	verticesData[5].pos.x = -0.5f;  verticesData[5].pos.y = 0.5f;  verticesData[5].pos.z = -1.0f;
@@ -52,19 +55,23 @@ int Init ( ESContext *esContext )
 	glBindBuffer(GL_ARRAY_BUFFER, vboId); //buffer object binding
 	glBufferData(GL_ARRAY_BUFFER, sizeof(verticesData), verticesData, GL_STATIC_DRAW); //creation and initializion of buffer onject storage
 	glBindBuffer(GL_ARRAY_BUFFER, cube);
+	
+	*/
+
+	bus.loadVertices("../Resources/Models/bus.nfg");
 
 	//creation of shaders and program 
 	return myShaders.Init("../Resources/Shaders/TriangleShaderVS.vs", "../Resources/Shaders/TriangleShaderFS.fs");
 
 }
 
-void Draw ( ESContext *esContext )
+void Draw(ESContext *esContext)
 {
 	glClear(GL_COLOR_BUFFER_BIT);
-
 	glUseProgram(myShaders.program);
-
-	glBindBuffer(GL_ARRAY_BUFFER, vboId);
+	glBindBuffer(GL_ARRAY_BUFFER, bus.m_hVertexBuffer); //binded model's vertices
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bus.m_hIndexBuffer); //binded indices
+	//glBindBuffer(GL_ARRAY_BUFFER, vboId);
 
 	GLfloat* ptr = (GLfloat *)0;
 	if (myShaders.positionAttribute != -1)
@@ -73,18 +80,18 @@ void Draw ( ESContext *esContext )
 		glVertexAttribPointer(myShaders.positionAttribute, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), ptr);
 		glUniformMatrix4fv(myShaders.matrixTransform, 1, false, (GLfloat *)&m);
 	}
-
-
+/*
 	if (myShaders.colorAttribute != -1)
 	{
 		glEnableVertexAttribArray(myShaders.colorAttribute);
 		glVertexAttribPointer(myShaders.colorAttribute, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), ptr + 3);
-	}
+	}*/
 
-	glDrawElements(GL_TRIANGLES, countIndeces, GL_UNSIGNED_INT, (void*)cube);
-	//glDrawArrays(GL_TRIANGLE_FAN, 0, 5);
+	glDrawElements(GL_TRIANGLES, bus.nrIndices, GL_UNSIGNED_INT, (void*)bus.m_hVertexBuffer);
+
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 	eglSwapBuffers ( esContext->eglDisplay, esContext->eglSurface );
 }
