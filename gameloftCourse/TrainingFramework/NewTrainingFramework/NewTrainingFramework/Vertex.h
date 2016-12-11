@@ -5,6 +5,5 @@
 struct Vertex 
 {
 	Vector3 pos/*, color*/;
-	//norm, binorm, tgt;
-	//Vector2 uv;
+	Vector2 uv;
 };
